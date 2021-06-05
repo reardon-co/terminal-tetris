@@ -1,4 +1,5 @@
 import tetrimino
+import copy
 
 class Board:
 
@@ -9,7 +10,7 @@ class Board:
         self.borderChar = borderChar
         self.innerChar = innerChar
         self.activeTetrimino = None
-        self.inactiveTetriminos = None
+        self.inactiveTetriminos = []
         
         # Checking if the state has been instantiated
         if state == "":
@@ -88,5 +89,19 @@ class Board:
                 for columnIndex, char in enumerate(row):
                     self.state[rowIndex + y][columnIndex + x] = self.innerChar
                     
+    # Checks if the active tetrimino is at the bottom
+    def isTileBelowSafe(self):
+        # print(self.state[self.activeTetrimino.bounds[3][1] + 1][self.activeTetrimino.bounds[3][0]])
+        if self.state[self.activeTetrimino.bounds[3][1] + 1][self.activeTetrimino.bounds[3][0]] is self.innerChar:
+            return True
+        else:
+            self.changeActiveTetrimino()
+            return False
 
+    
+    # Changes the active tetrimino and adds it to teh inactive pile
+    def changeActiveTetrimino(self):
+        self.inactiveTetriminos.append(copy.deepcopy(self.activeTetrimino))
+        self.activeTetrimino = None
 
+        
